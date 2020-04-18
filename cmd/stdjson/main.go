@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"net/http/pprof"
 	"time"
 
 	"github.com/amin-mir/jsonperfopt/person"
@@ -32,19 +33,21 @@ func EchoHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	// Simulate making queries against DB.
-	// sleep()
-
 	if err := json.NewEncoder(w).Encode(p); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
 	mux := http.NewServeMux()
 	mux.HandleFunc("/echo", EchoHandler)
+
+	// Register pprof handlers
+	mux.HandleFunc("/debug/pprof/", pprof.Index)
+	mux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	mux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	mux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
 	log.Printf("Starting HTTP server on port %d", port)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), mux); err != nil {
