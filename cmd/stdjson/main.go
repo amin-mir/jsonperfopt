@@ -11,9 +11,7 @@ import (
 )
 
 const (
-	port     int = 8080
-	minSleep     = 15
-	maxSleep     = 50
+	port int = 8080
 )
 
 func EchoHandler(w http.ResponseWriter, r *http.Request) {
