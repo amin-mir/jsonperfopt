@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"net/http/pprof"
-	"time"
 
 	"github.com/amin-mir/jsonperfopt/person"
 )
@@ -17,11 +15,6 @@ const (
 	minSleep     = 15
 	maxSleep     = 50
 )
-
-func sleep() {
-	dur := rand.Intn(maxSleep-minSleep+1) + minSleep
-	time.Sleep(time.Duration(dur) * time.Millisecond)
-}
 
 func EchoHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
